@@ -1,0 +1,2 @@
+rootProject.name = "DNA app"
+include ':app'
