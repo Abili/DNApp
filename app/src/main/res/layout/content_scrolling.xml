@@ -8,10 +8,106 @@
     tools:context=".newproject.NewProject"
     tools:showIn="@layout/activity_new_project2">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Register Project"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/projectName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:drawableStart="@drawable/edit"
+            android:drawableLeft="@drawable/edit"
+            android:drawablePadding="20dp"
+            android:hint="Project Name"
+            android:inputType="textCapWords"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textColorHint="@android:color/holo_blue_dark" />
+
+        <EditText
+            android:id="@+id/clientName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:drawableStart="@drawable/edit"
+            android:drawablePadding="20dp"
+            android:hint="Client Name"
+            android:inputType="textAutoComplete"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textColorHint="@android:color/holo_blue_dark" />
+
+        <EditText
+            android:id="@+id/projectLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:drawableStart="@drawable/edit"
+            android:drawablePadding="20dp"
+            android:hint="Project Location"
+            android:inputType="text"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textColorHint="@android:color/holo_blue_dark" />
+
+        <EditText
+            android:id="@+id/clientPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:drawableStart="@drawable/edit"
+            android:drawableLeft="@drawable/edit"
+            android:drawablePadding="20dp"
+            android:hint="Client Phonenumber"
+            android:inputType="phone"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textColorHint="@android:color/holo_blue_dark" />
+
+        <EditText
+            android:id="@+id/payments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:drawableStart="@drawable/edit"
+            android:drawableLeft="@drawable/edit"
+            android:drawablePadding="20dp"
+            android:hint="Payments"
+            android:inputType="number"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textColorHint="@android:color/holo_blue_dark" />
+
+        <EditText
+            android:id="@+id/clientsID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:drawableStart="@drawable/edit"
+            android:drawableLeft="@drawable/edit"
+            android:drawablePadding="20dp"
+            android:hint="Client ID"
+            android:inputType="text"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textColorHint="@android:color/holo_blue_dark" />
+
+        <Button
+            android:id="@+id/createProjectBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="80dp"
+            android:backgroundTint="@android:color/holo_blue_dark"
+            android:text="Create Project" />
+    </LinearLayout>
+
 
 </androidx.core.widget.NestedScrollView>
