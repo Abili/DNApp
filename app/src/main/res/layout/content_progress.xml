@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".newproject.NewProject"
+    tools:showIn="@layout/activity_progress">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Progress of Project"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="General Progress"
+                android:layout_marginStart="10dp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textSize="20sp" />
+
+            <com.mackhartley.roundedprogressbar.RoundedProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_margin="10dp"
+                app:rpbBackgroundColor="#0099cc"
+                app:rpbBackgroundTextColor="#ffffff"
+                app:rpbCornerRadius="20dp"
+                app:rpbProgressColor="#888"
+                app:rpbProgressTextColor="#4ADBFF"
+                app:rpbTextPadding="12dp"
+                app:rpbTextSize="20sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Survey"
+                android:layout_marginStart="10dp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textSize="20sp" />
+
+            <com.mackhartley.roundedprogressbar.RoundedProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_margin="10dp"
+                app:rpbBackgroundColor="#0099cc"
+                app:rpbBackgroundTextColor="#ffffff"
+                app:rpbCornerRadius="20dp"
+                app:rpbProgressColor="#888"
+                app:rpbProgressTextColor="#4ADBFF"
+                app:rpbTextPadding="12dp"
+                app:rpbTextSize="20sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Payment"
+                android:layout_marginStart="10dp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textSize="20sp" />
+
+            <com.mackhartley.roundedprogressbar.RoundedProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_margin="10dp"
+                app:rpbBackgroundColor="#0099cc"
+                app:rpbBackgroundTextColor="#ffffff"
+                app:rpbCornerRadius="20dp"
+                app:rpbProgressColor="#888"
+                app:rpbProgressTextColor="#4ADBFF"
+                app:rpbTextPadding="12dp"
+                app:rpbTextSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Land Title processing"
+                android:layout_marginStart="10dp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textSize="20sp" />
+
+            <com.mackhartley.roundedprogressbar.RoundedProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_margin="10dp"
+                app:rpbBackgroundColor="#0099cc"
+                app:rpbBackgroundTextColor="#ffffff"
+                app:rpbCornerRadius="20dp"
+                app:rpbProgressColor="#888"
+                app:rpbProgressTextColor="#4ADBFF"
+                app:rpbTextPadding="12dp"
+                app:rpbTextSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Others"
+                android:layout_marginStart="10dp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textSize="20sp" />
+
+            <com.mackhartley.roundedprogressbar.RoundedProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_margin="10dp"
+                app:rpbBackgroundColor="#0099cc"
+                app:rpbBackgroundTextColor="#ffffff"
+                app:rpbCornerRadius="20dp"
+                app:rpbProgressColor="#888"
+                app:rpbProgressTextColor="#4ADBFF"
+                app:rpbTextPadding="12dp"
+                app:rpbTextSize="20sp" />
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+</androidx.core.widget.NestedScrollView>

@@ -7,14 +7,12 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.MediaStore.Images.Media.getBitmap
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import com.raisac.smartorder.R
 import com.raisc.dnaapp.R
 import com.theartofdev.edmodo.cropper.CropImage
 
@@ -25,7 +23,11 @@ class ChangePhotoDialog : DialogFragment() {
     }
 
     var mOnPhotoReceived: OnPhotoReceivedListener? = null
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.activity_change_photo_dialog, container, false)
 
         //Initialize the textview for choosing an image from memory
@@ -56,7 +58,7 @@ class ChangePhotoDialog : DialogFragment() {
             val selectedImageUri = data!!.data
             Log.d(TAG, "onActivityResult: image: $selectedImageUri")
             CropImage.activity(selectedImageUri)
-                    .start(context!!, this)
+                .start(requireContext(), this)
 
             //send the bitmap and fragment to the interface
         } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {

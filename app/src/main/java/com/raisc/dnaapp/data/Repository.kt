@@ -2,7 +2,6 @@ package com.raisc.dnaapp.data
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.raisc.dnaapp.model.Project
 import java.util.concurrent.ExecutorService
@@ -11,12 +10,13 @@ import javax.inject.Inject
 
 class Repository @Inject constructor(
     private val projectsDao: ProjectsDao?,
+    private val inCompleteDao: InCompleteProjectsDao?,
     private val context: Context?,
     private val mIoExecutor: ExecutorService
 ) {
 
     private var isCachedExpired = true
-    private val mUid = FirebaseAuth.getInstance().currentUser.uid
+//    private val mUid = FirebaseAuth.getInstance().currentUser.uid
 
 //    fun getSortedTeas(sort: String?, fileByFavorite: Boolean?): LiveData<PagedList<BarItem>> {
 //        val sortBy: SortUtils.TeaSortBy = SortUtils.TeaSortBy.valueOf(sort)
@@ -33,13 +33,31 @@ class Repository @Inject constructor(
         return projectsDao!!.getPendingProjects()
     }
 
+    fun getPendingProject(projectName: String): LiveData<List<Project>> {
+        //refreshCache(CACHE_EXPIRY_HOURS)
+        return projectsDao!!.getPendingProject(projectName)
+    }
+
     fun getIncompleteProjects(): LiveData<List<Project>> {
         //refreshCache(CACHE_EXPIRY_HOURS)
-        return projectsDao!!.getIncompleteProjects()
+//        firebaseDatabase.addValueEventListener(object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                if (snapshot.exists() && snapshot.childrenCount > 0) {
+//                    val incompleteProject = snapshot.getValue(Project::class.java)
+//                }
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//                TODO("Not yet implemented")
+//            }
+        // })
+
+        return inCompleteDao!!.getIncompleteProjects()
     }
 
     fun getCompleteProjects(): LiveData<List<Project>> {
         //refreshCache(CACHE_EXPIRY_HOURS)
+
         return projectsDao!!.getcompleteProjects()
     }
 
@@ -64,22 +82,23 @@ class Repository @Inject constructor(
     fun save(item: Project) {
         mIoExecutor.execute {
             //saving to locat database
-            projectsDao!!.insert(item)
+            inCompleteDao!!.insert(item)
 
             //store key inside her for temp use
-            val cartKey = FirebaseDatabase.getInstance().reference
+            cartKey
                 .child("user")
-                .child(mUid)
+                //.child(mUid)
                 .child("projects")
 
 
             //saving to firbase
-            val firebaseDatabase = FirebaseDatabase.getInstance().reference
-                .child("users")
-                .child(mUid)
+            firebaseDatabase
+                .child("user")
+                //.child(mUid)
                 .child("projects")
-                .child("orders")
+                .child("incomplete")
             key = firebaseDatabase.push().key!!
+
             firebaseDatabase.child(key).setValue(item)
             cartKey.child("key").setValue(key)
         }
@@ -98,6 +117,8 @@ class Repository @Inject constructor(
         var key = ""
 
         val TAG = Repository::class.java.simpleName
+        val firebaseDatabase = FirebaseDatabase.getInstance().reference
+        val cartKey = FirebaseDatabase.getInstance().reference
 
         @Volatile
         private var sInstance: Repository? = null
@@ -107,9 +128,12 @@ class Repository @Inject constructor(
                 synchronized(Repository::class.java) {
                     if (sInstance == null) {
                         val database: ProjectsDatabase = ProjectsDatabase.getInstance(context!!)
+                        val incompleteDb = IncompleteProjectsDatabase.getInstance(context)
                         //val cartDatabase: CartItemsDatabase = CartItemsDatabase.getInstance(context)
                         sInstance = Repository(
-                            database.projectsDao(), context,
+                            database.projectsDao(),
+                            incompleteDb.incompleteDao(),
+                            context,
                             Executors.newSingleThreadExecutor()
                         )
                     }

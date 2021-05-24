@@ -39,7 +39,8 @@
             android:hint="Client Name"
             android:inputType="textAutoComplete"
             android:textColor="@android:color/holo_blue_dark"
-            android:textColorHint="@android:color/holo_blue_dark" />
+            android:textColorHint="@android:color/holo_blue_dark"
+            android:drawableLeft="@drawable/edit" />
 
         <EditText
             android:layout_width="match_parent"
@@ -50,7 +51,8 @@
             android:hint="Project Location"
             android:inputType="text"
             android:textColor="@android:color/holo_blue_dark"
-            android:textColorHint="@android:color/holo_blue_dark" />
+            android:textColorHint="@android:color/holo_blue_dark"
+            android:drawableLeft="@drawable/edit" />
 
         <EditText
             android:layout_width="match_parent"
@@ -61,7 +63,8 @@
             android:hint="Client Phonenumber"
             android:inputType="phone"
             android:textColor="@android:color/holo_blue_dark"
-            android:textColorHint="@android:color/holo_blue_dark" />
+            android:textColorHint="@android:color/holo_blue_dark"
+            android:drawableLeft="@drawable/edit" />
 
         <EditText
             android:layout_width="match_parent"
@@ -72,7 +75,8 @@
             android:hint="Payments"
             android:inputType="number"
             android:textColor="@android:color/holo_blue_dark"
-            android:textColorHint="@android:color/holo_blue_dark" />
+            android:textColorHint="@android:color/holo_blue_dark"
+            android:drawableLeft="@drawable/edit" />
 
         <EditText
             android:layout_width="match_parent"
@@ -83,7 +87,8 @@
             android:hint="Client ID"
             android:inputType="text"
             android:textColor="@android:color/holo_blue_dark"
-            android:textColorHint="@android:color/holo_blue_dark" />
+            android:textColorHint="@android:color/holo_blue_dark"
+            android:drawableLeft="@drawable/edit" />
     </LinearLayout>
 
 

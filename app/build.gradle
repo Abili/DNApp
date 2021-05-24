@@ -1,8 +1,8 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
 }
 
 android {
@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.raisc.dnaapp"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -97,7 +97,7 @@ dependencies {
     def paging_version = "2.1.2"
     def versions_retrofit = '2.6.0'
     def versions_koin_version = '2.1.5'
-    def daggerVersion = "2.28.3"
+    def daggerVersion = "2.35.1"
     def versions_okhttp = '3.12.10' // older okhttp version to support api 19
 
 
@@ -111,7 +111,7 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
     implementation "androidx.work:work-runtime:$work_version"
 
-    implementation "androidx.recyclerview:recyclerview:1.2.0"
+    implementation "androidx.recyclerview:recyclerview:1.2.0" 
     // For control over item selection of both touch and mouse driven selection
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
 
@@ -144,4 +144,8 @@ dependencies {
     //face book shimmering effec
     implementation 'com.facebook.shimmer:shimmer:0.5.0@aar'
 
+    //custom progress bar
+    implementation 'com.github.MackHartley:RoundedProgressBar:2.1.0'
+
 }
+apply plugin: 'com.google.gms.google-services'

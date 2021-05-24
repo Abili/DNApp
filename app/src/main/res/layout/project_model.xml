@@ -25,7 +25,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/clientImageView"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center_vertical"
@@ -36,7 +36,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/avatars" />
+                tools:srcCompat="@tools:sample/avatars"
+                android:contentDescription="TODO" />
 
             <TextView
                 android:id="@+id/projectName"
@@ -50,7 +51,7 @@
                 android:textColor="@android:color/holo_blue_dark"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/clientName"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintStart_toEndOf="@+id/clientImageView"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -64,8 +65,9 @@
                 android:text="Client Name"
                 android:textColor="@android:color/holo_blue_dark"
                 android:textSize="20sp"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
-                app:layout_constraintTop_toBottomOf="@+id/projectName" />
+                app:layout_constraintStart_toEndOf="@+id/clientImageView"
+                app:layout_constraintTop_toBottomOf="@+id/projectName"
+                android:layout_marginEnd="193dp" />
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -78,7 +80,8 @@
                 android:src="@drawable/more"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="TODO" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

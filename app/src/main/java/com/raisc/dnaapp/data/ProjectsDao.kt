@@ -30,6 +30,9 @@ interface ProjectsDao {
     @Query("SELECT * from projects_table")
     fun getPendingProjects(): LiveData<List<Project>>
 
+    @Query("SELECT * from projects_table where projectName =:name")
+    fun getPendingProject(name:String): LiveData<List<Project>>
+
     @Query("SELECT * from projects_table")
     fun getcompleteProjects(): LiveData<List<Project>>
 

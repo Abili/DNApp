@@ -18,6 +18,7 @@
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/background_img"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -38,15 +39,33 @@
         layout="@layout/content_scrolling" />
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:background="@drawable/round_b_white"
         android:id="@+id/profileImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_account_circle"
         app:civ_border_color="@android:color/holo_blue_dark"
         app:civ_border_width="2dp"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|start" />
 
+    <Button
+        android:id="@+id/createProjectBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginTop="80dp"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:text="@string/create_project" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:visibility="invisible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "717275014594",
+    "project_id": "dna-app-cd5a1",
+    "storage_bucket": "dna-app-cd5a1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717275014594:android:65bead832eba9a7c64e25b",
+        "android_client_info": {
+          "package_name": "com.raisc.dnaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "717275014594-2r774jj3q62vbri0m3j6rpj22725tem0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbJF6Kfgl9twKwMePAe2KCMU1CcMU1vcI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717275014594-2r774jj3q62vbri0m3j6rpj22725tem0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -22,13 +22,16 @@ class NewProjectViewModel
         projectName: String,
         clientName: String,
         imageUrl: String,
-        clientPhone: String
+        clientPhone: String,
+        clientId: String,
+        projectLocation: String
     ) {
         if (projectName.isEmpty() || clientName.isEmpty() || clientPhone.isEmpty()) {
             mProjectSaved.value = false
             return
         }
-        val project = Project(projectName, clientName, imageUrl, clientPhone)
+        val project =
+            Project(null, projectName, clientName, imageUrl, clientPhone, projectLocation, clientId)
         saveProject(project)
         mProjectSaved.value = true
     }

@@ -91,4 +91,6 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="incomplete_projects">Incomplete Projects</string>
+    <string name="create_project">Create Project</string>
 </resources>

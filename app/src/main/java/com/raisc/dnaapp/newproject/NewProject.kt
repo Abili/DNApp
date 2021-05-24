@@ -18,9 +18,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
@@ -32,16 +34,21 @@ import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.raisc.dnaapp.R
 import com.raisc.dnaapp.databinding.ActivityNewProject2Binding
+import com.raisc.dnaapp.dialogs.ChangePhotoDialog
+import com.raisc.dnaapp.incompleteproject.IncompleteActivity
 import com.raisc.dnaapp.model.Project
+import com.raisc.dnaapp.pendingproject.PendingProjectViewModelFactory
+import com.raisc.dnaapp.pendingproject.PendingViewModel
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 
-class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
+class NewProject : AppCompatActivity(), ChangePhotoDialog.OnPhotoReceivedListener {
 
     var imageLoader: ImageLoader? = null
     private var mCurrentUser: FirebaseUser? = null
     private var mUid: String? = null
     private var mReference: DatabaseReference? = null
+    private var viewModel: NewProjectViewModel? = null
     private val mDialog: BottomSheetDialog? = null
 
     override fun getImagePath(imagePath: Uri) {
@@ -58,7 +65,7 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
             mSelectedImageUri = null
             mSelectedImageBitmap = bitmap
             Log.d(TAG, "getImageBitmap: got the image bitmap: $mSelectedImageBitmap")
-            binding?.profileImage!!.setImageBitmap(bitmap)
+            binding.profileImage.setImageBitmap(bitmap)
         }
     }
 
@@ -79,7 +86,7 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
     private var mSelectedImageBitmap: Bitmap? = null
     private var mBytes: ByteArray? = null
     private val progress = 0.0
-    var mAuth: FirebaseAuth? = null
+    private var mAuth: FirebaseAuth? = null
     var patients = "patients"
     //boolean isButtonEnabled = !Objects.requireNonNull(mSave).isEnabled();
 
@@ -88,21 +95,21 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        FirebaseApp.initializeApp(this)
         binding = ActivityNewProject2Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(findViewById(R.id.toolbar))
         binding.toolbarLayout.title = title
-        binding.profileImage.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
 
         init()
         hideSoftKeyboard()
-        mAuth = FirebaseAuth.getInstance()
-        mCurrentUser = mAuth!!.currentUser
+//        mAuth = FirebaseAuth.getInstance()
+//        mCurrentUser = mAuth!!.currentUser
         mReference = FirebaseDatabase.getInstance().reference
+
+        val viewModelFactory = NewProjectViewModelFactory.createFactory(this)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(NewProjectViewModel::class.java)
 
     }
 
@@ -112,10 +119,10 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
         val photoUrl = getProfle.getStringExtra("user_image")
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this@NewProject))
         //getUserAccountData();
-        binding?.profileImage!!.setOnClickListener {
+        binding.profileImage.setOnClickListener {
             getPhotos()
         }
-        binding.contents.createProjectBtn.setOnClickListener {
+        binding.createProjectBtn.setOnClickListener {
             signUp()
         }
 
@@ -123,15 +130,15 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
 
     override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        if (mCurrentUser == null) {
-            startActivity(Intent(this, MainActivity::class.java))
-        } else {
-            mUid = mCurrentUser!!.uid
-        }
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//        if (mCurrentUser == null) {
+//            startActivity(Intent(this, MainActivity::class.java))
+//        } else {
+//            mUid = mCurrentUser!!.uid
+//        }
     }
 
-    fun signUp() {
+    private fun signUp() {
         val pName = binding.contents.projectName
         val cName = binding.contents.clientName
         val pLocation = binding.contents.projectLocation
@@ -142,15 +149,15 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
 
         val projectName = pName.text.toString()
         val clientName = cName.text.toString()
-        val clientPhone = pName.text.toString()
-        val projectLocation = cName.text.toString()
-        val payments = pName.text.toString()
-        val clientID = cName.text.toString()
+        val clientPhone = cPhone.text.toString()
+        val projectLocation = pLocation.text.toString()
+        val payments = cPayments.text.toString()
+        val clientID = cID.text.toString()
 
-        var phone: String? = null
-        if (currentUser != null) {
-            phone = mAuth.currentUser?.phoneNumber!!
-        }
+//        var phone: String? = null
+//        if (currentUser != null) {
+//            phone = mAuth?.currentUser?.phoneNumber!!
+//        }
 
         if (projectLocation.isNotEmpty() && projectName.isNotEmpty()
             && clientName.isNotEmpty() && clientID.isNotEmpty() && clientPhone.isNotEmpty()
@@ -166,10 +173,17 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
                     payments,
                     clientID
                 )
-            saveToFirebasedatabase(project)
+            //saveToFirebasedatabase(project)
+            viewModel?.saveProject(project)
+            binding.createProjectBtn.isEnabled = false
+            binding.progressBar.visibility = View.INVISIBLE
+            finish()
+            Toast.makeText(this, "Project Created", Toast.LENGTH_SHORT).show()
+
 
         } else {
-            Toast.makeText(this, "Names Required !", Toast.LENGTH_LONG).show()
+
+            Toast.makeText(this, "Fields Required Required !", Toast.LENGTH_LONG).show()
         }
 
         /*------ Upload the New Photo -----*/
@@ -178,22 +192,23 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
         } else if (mSelectedImageBitmap != null) {
             uploadNewPhoto(mSelectedImageBitmap)
         }
-        binding?.progressBar?.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.VISIBLE
     }
 
-    private fun saveToFirebasedatabase(user: Users) {
-
-        mReference!!.child("users")
-            .child(mUid!!) //.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-            .setValue(user)
-            .addOnSuccessListener {
-                binding?.progressBar?.visibility = View.GONE
-
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "cant upload names", Toast.LENGTH_SHORT).show()
-            }
-    }
+//    private fun saveToFirebasedatabase(project: Project) {
+//
+//        mReference!!.child("users")
+//            .child("projects") //.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+//            .child("incomplete")
+//            .setValue(project)
+//            .addOnSuccessListener {
+//                binding.progressBar.visibility = View.GONE
+//
+//            }
+//            .addOnFailureListener {
+//                Toast.makeText(this, "cant upload names", Toast.LENGTH_SHORT).show()
+//            }
+//    }
 
 
     private fun getPhotos() {
@@ -211,12 +226,12 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
             Log.d(TAG, "onActivityResult: image: $selectedImageUri")
 
             //TODO send the bitmap and frrgment to the interface
-            binding?.profileImage!!.setImageURI(selectedImageUri)
+            binding.profileImage.setImageURI(selectedImageUri)
             imageUploadDialog!!.dismiss()
         } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
             Log.d(TAG, "onActivityResult: done taking a photo.")
             val bitmap: Bitmap? = data!!.extras!!["data"] as Bitmap?
-            binding?.profileImage!!.setImageBitmap(bitmap)
+            binding.profileImage.setImageBitmap(bitmap)
             imageUploadDialog!!.dismiss()
         }
     }
@@ -266,7 +281,7 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
         override fun onPreExecute() {
             super.onPreExecute()
 
-            Toast.makeText(this@UserProfile, "please wait...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@NewProject, "please wait...", Toast.LENGTH_SHORT).show()
         }
 
         override fun doInBackground(vararg params: Uri?): ByteArray? {
@@ -274,7 +289,7 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
             if (mBitmap == null) {
                 try {
                     mBitmap = MediaStore.Images.Media.getBitmap(
-                        this@UserProfile.contentResolver,
+                        this@NewProject.contentResolver,
                         params[0]
                     )
                     Log.d(
@@ -288,7 +303,7 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
             var bytes: ByteArray? = null
             for (i in 1..10) {
                 if (i == 10) {
-                    Toast.makeText(this@UserProfile, "That image is too large.", Toast.LENGTH_SHORT)
+                    Toast.makeText(this@NewProject, "That image is too large.", Toast.LENGTH_SHORT)
                         .show()
                     break
                 }
@@ -362,14 +377,14 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
             }.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val downloadUri: Uri? = task.result
-                    val mKey = mReference?.child("users")?.push()?.key
+                    val mKey = mReference?.child("user")?.push()?.key
                     FirebaseDatabase.getInstance().reference
-                        .child("users")
+                        .child("user")
                         .child(mUid!!)
                         .child("profilePics")//.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .setValue(downloadUri.toString())
-                    Toast.makeText(this@UserProfile, "Account created", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this@UserProfile, Location::class.java))
+                    Toast.makeText(this@NewProject, "Project created", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this@NewProject, IncompleteActivity::class.java))
                     finish()
 
                     hideDialog()
@@ -406,7 +421,7 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
             mStoragePermissions = true
         } else {
             ActivityCompat.requestPermissions(
-                this@UserProfile,
+                this@NewProject,
                 permissions,
                 REQUEST_CODE
             )
@@ -418,6 +433,7 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         Log.d(TAG, "onRequestPermissionsResult: requestCode: $requestCode")
         when (requestCode) {
             REQUEST_CODE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -431,12 +447,12 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
 
 
     fun showDialog() {
-        binding!!.progressBar.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.VISIBLE
     }
 
     fun hideDialog() {
-        if (binding!!.progressBar.visibility == View.VISIBLE) {
-            binding!!.progressBar.visibility = View.INVISIBLE
+        if (binding.progressBar.visibility == View.VISIBLE) {
+            binding.progressBar.visibility = View.INVISIBLE
         }
     }
 
@@ -456,28 +472,21 @@ class NewProject : AppCompatActivity(), OnPhotoReceivedListener {
 
 
     companion object {
-        private val REQUEST_CODE = 1234
-        private val MB_THRESHHOLD = 5.0
-        private val MB = 1000000.0
+        private const val REQUEST_CODE = 1234
+        private const val MB_THRESHHOLD = 5.0
+        private const val MB = 1000000.0
 
         var imageUploadDialog: Dialog? = null
-        val CAMERA_REQUEST_CODE = 5467
-        val PICKFILE_REQUEST_CODE = 8352
+        const val CAMERA_REQUEST_CODE = 5467
+        const val PICKFILE_REQUEST_CODE = 8352
 
-        private val TAG = "UserProfile"
+        private const val TAG = "UserProfile"
 
         const val FIREBASE_IMAGE_STORAGE = "images/users"
 
-        var mAuth = FirebaseAuth.getInstance()
-        val currentUser = mAuth.currentUser
+//        private var mAuth = FirebaseAuth.getInstance()
+//        val currentUser = mAuth.currentUser
 
     }
-
-}
-
-
-
-
-
 
 }
