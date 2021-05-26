@@ -11,6 +11,7 @@ import javax.inject.Inject
 class Repository @Inject constructor(
     private val projectsDao: ProjectsDao?,
     private val inCompleteDao: InCompleteProjectsDao?,
+    private val completeDao: CompleteProjectsDao?,
     private val context: Context?,
     private val mIoExecutor: ExecutorService
 ) {
@@ -27,6 +28,12 @@ class Repository @Inject constructor(
 
 
 //
+
+
+    fun deleteProject(project: Project) {
+        //refreshCache(CACHE_EXPIRY_HOURS)
+        return inCompleteDao!!.delete(project)
+    }
 
     fun getPendingProjects(): LiveData<List<Project>> {
         //refreshCache(CACHE_EXPIRY_HOURS)
@@ -52,13 +59,14 @@ class Repository @Inject constructor(
 //            }
         // })
 
+
         return inCompleteDao!!.getIncompleteProjects()
     }
 
     fun getCompleteProjects(): LiveData<List<Project>> {
         //refreshCache(CACHE_EXPIRY_HOURS)
 
-        return projectsDao!!.getcompleteProjects()
+        return completeDao!!.getCompleteProjects()
     }
 
     fun getNewProjectsProjects(): LiveData<List<Project>> {
@@ -111,6 +119,40 @@ class Repository @Inject constructor(
 
     }
 
+
+    fun makeComplete(item: Project) {
+        mIoExecutor.execute {
+            //saving to locat database
+            inCompleteDao!!.insert(item)
+
+            //store key inside her for temp use
+            cartKey
+                .child("user")
+                //.child(mUid)
+                .child("projects")
+
+
+            //saving to firbase
+            firebaseDatabase
+                .child("user")
+                //.child(mUid)
+                .child("projects")
+                .child("complete")
+            key = firebaseDatabase.push().key!!
+
+            firebaseDatabase.child(key).setValue(item)
+            cartKey.child("key").setValue(key)
+        }
+
+//    override fun saveCount(count: BarsClubsItem) {
+//        mIoExecutor.execute {
+//            dao!!.saveCount(count)
+//        }
+//    }
+
+    }
+
+
     companion object {
         const val LIMIT = 10
         const val CACHE_EXPIRY_HOURS = 2 // cache expiry time in hours
@@ -129,10 +171,11 @@ class Repository @Inject constructor(
                     if (sInstance == null) {
                         val database: ProjectsDatabase = ProjectsDatabase.getInstance(context!!)
                         val incompleteDb = IncompleteProjectsDatabase.getInstance(context)
-                        //val cartDatabase: CartItemsDatabase = CartItemsDatabase.getInstance(context)
+                        val completeDb = CompleteProjectsDatabase.getInstance(context)
                         sInstance = Repository(
                             database.projectsDao(),
                             incompleteDb.incompleteDao(),
+                            completeDb.completeDao(),
                             context,
                             Executors.newSingleThreadExecutor()
                         )

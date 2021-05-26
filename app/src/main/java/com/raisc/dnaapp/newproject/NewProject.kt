@@ -21,7 +21,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -37,8 +36,6 @@ import com.raisc.dnaapp.databinding.ActivityNewProject2Binding
 import com.raisc.dnaapp.dialogs.ChangePhotoDialog
 import com.raisc.dnaapp.incompleteproject.IncompleteActivity
 import com.raisc.dnaapp.model.Project
-import com.raisc.dnaapp.pendingproject.PendingProjectViewModelFactory
-import com.raisc.dnaapp.pendingproject.PendingViewModel
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 
@@ -101,6 +98,8 @@ class NewProject : AppCompatActivity(), ChangePhotoDialog.OnPhotoReceivedListene
 
         setSupportActionBar(findViewById(R.id.toolbar))
         binding.toolbarLayout.title = title
+
+        val intent = intent.getStringExtra("project")
 
         init()
         hideSoftKeyboard()

@@ -92,5 +92,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/project_model" />
+        tools:listitem="@layout/incomplete_project_model" />
 </LinearLayout>

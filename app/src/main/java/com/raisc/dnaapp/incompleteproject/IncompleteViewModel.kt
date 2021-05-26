@@ -16,6 +16,14 @@ class IncompleteViewModel
         return mRepository!!.getIncompleteProjects()
     }
 
+    fun delete(project: Project) {
+        return mRepository!!.deleteProject(project)
+    }
+
+    fun markComplete(project: Project) {
+        return mRepository!!.makeComplete(project)
+    }
+
 
 //    fun setTeaImage(teaType: String?) {
 //        mTeaDetail.setValue(BarsItemsViewModel(teaType))

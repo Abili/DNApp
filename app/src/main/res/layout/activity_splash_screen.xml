@@ -5,10 +5,11 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_centerInParent="true"
         android:layout_width="match_parent"
-        android:src="@drawable/welcome_screen"
         android:layout_height="match_parent"
-        android:contentDescription="TODO" />
+        android:layout_centerInParent="true"
+        android:contentDescription="TODO"
+        android:scaleType="centerCrop"
+        android:src="@drawable/welcome_screen" />
 
 </RelativeLayout>
