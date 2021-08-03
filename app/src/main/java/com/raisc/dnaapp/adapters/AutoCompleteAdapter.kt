@@ -55,9 +55,9 @@ class AutoCompleteAdapter(
                     allPois
                 else
                     allPois.filter {
-                        it.projectName.toLowerCase().contains(queryString) ||
-                                it.clientName.toLowerCase().contains(queryString) ||
-                                it.projectLocation.toLowerCase().contains(queryString)
+                        it.projectName!!.toLowerCase().contains(queryString) ||
+                                it.clientName!!.toLowerCase().contains(queryString) ||
+                                it.projectLocation!!.toLowerCase().contains(queryString)
                     }
 
                 return filterResults

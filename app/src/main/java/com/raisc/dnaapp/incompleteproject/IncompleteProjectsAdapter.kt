@@ -1,4 +1,4 @@
-package com.raisc.dnaapp.adapters
+package com.raisc.dnaapp.incompleteproject
 
 import android.content.Context
 import android.content.Intent
@@ -7,8 +7,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.raisc.dnaapp.R
@@ -18,7 +18,7 @@ import com.raisc.dnaapp.ui.ProgressActivity
 
 
 class IncompleteProjectsAdapter(private val onItemClicklistener: OnItemClick) :
-    ListAdapter<Project, IncompleteProjectsAdapter.BarsViewHolder>(BarsComparator()) {
+    PagingDataAdapter<Project, IncompleteProjectsAdapter.BarsViewHolder>(BarsComparator()) {
 
     interface OnItemClick {
         fun onItemClicked(adapterPosition: Int, itemView: View)
@@ -30,7 +30,7 @@ class IncompleteProjectsAdapter(private val onItemClicklistener: OnItemClick) :
 
     override fun onBindViewHolder(holder: BarsViewHolder, position: Int) {
         val current = getItem(position)
-        holder.bind(current)
+        holder.bind(current!!)
 
     }
 

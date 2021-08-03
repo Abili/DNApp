@@ -11,8 +11,8 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 @Database(entities = [Project::class], version = 1)
-abstract class CompleteProjectsDatabase : RoomDatabase(), CompleteProjectsDao {
-    abstract fun completeDao(): CompleteProjectsDao?
+abstract class CompleteProjectsDatabase : RoomDatabase() {
+    abstract val completeDao: CompleteProjectsDao
 
     companion object {
         private const val NUMBER_OF_THREADS = 4

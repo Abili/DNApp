@@ -1,7 +1,7 @@
 package com.raisc.dnaapp.data
 
 import android.content.Context
-import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import com.google.firebase.database.FirebaseDatabase
 import com.raisc.dnaapp.model.Project
 import java.util.concurrent.ExecutorService
@@ -9,7 +9,7 @@ import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class Repository @Inject constructor(
-    private val projectsDao: ProjectsDao?,
+    private val pendingProjectsDao: PendingProjectsDao?,
     private val inCompleteDao: InCompleteProjectsDao?,
     private val completeDao: CompleteProjectsDao?,
     private val context: Context?,
@@ -35,44 +35,31 @@ class Repository @Inject constructor(
         return inCompleteDao!!.delete(project)
     }
 
-    fun getPendingProjects(): LiveData<List<Project>> {
+    fun getPendingProjects(): PagingSource<Int, Project> {
         //refreshCache(CACHE_EXPIRY_HOURS)
-        return projectsDao!!.getPendingProjects()
+        return pendingProjectsDao!!.getPendingProjects()
     }
 
-    fun getPendingProject(projectName: String): LiveData<List<Project>> {
+    fun getPendingProject(projectName: String): Project {
         //refreshCache(CACHE_EXPIRY_HOURS)
-        return projectsDao!!.getPendingProject(projectName)
+        return pendingProjectsDao!!.getPendingProject(projectName)
     }
 
-    fun getIncompleteProjects(): LiveData<List<Project>> {
-        //refreshCache(CACHE_EXPIRY_HOURS)
-//        firebaseDatabase.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                if (snapshot.exists() && snapshot.childrenCount > 0) {
-//                    val incompleteProject = snapshot.getValue(Project::class.java)
-//                }
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//                TODO("Not yet implemented")
-//            }
-        // })
-
-
+    fun getIncompleteProjects(): PagingSource<Int,Project> {
         return inCompleteDao!!.getIncompleteProjects()
     }
 
-    fun getCompleteProjects(): LiveData<List<Project>> {
+
+    fun getCompleteProjects(): PagingSource<Int, Project> {
         //refreshCache(CACHE_EXPIRY_HOURS)
 
         return completeDao!!.getCompleteProjects()
     }
 
-    fun getNewProjectsProjects(): LiveData<List<Project>> {
-        //refreshCache(CACHE_EXPIRY_HOURS)
-        return projectsDao!!.getNewProjects()
-    }
+//    fun getNewProjectsProjects(): PagingSource<Int, Project> {
+//        //refreshCache(CACHE_EXPIRY_HOURS)
+//        return pendingProjectsDao!!.getNewProjects()
+//    }
 
 //    fun refreshCache(cacheExpiryHours: Int) {
 //        projectsDao!!.get()
@@ -164,18 +151,18 @@ class Repository @Inject constructor(
 
         @Volatile
         private var sInstance: Repository? = null
-        private const val PAGE_SIZE = 20
-        fun getInstance(context: Context?): Repository? {
+        private const val PAGE_SIZE = 10
+        fun getInstance(context: Context): Repository? {
             if (sInstance == null) {
                 synchronized(Repository::class.java) {
                     if (sInstance == null) {
-                        val database: ProjectsDatabase = ProjectsDatabase.getInstance(context!!)
+                        val pendingProjectsDb = PendingProjectsDatabase.getInstance(context)
                         val incompleteDb = IncompleteProjectsDatabase.getInstance(context)
                         val completeDb = CompleteProjectsDatabase.getInstance(context)
                         sInstance = Repository(
-                            database.projectsDao(),
-                            incompleteDb.incompleteDao(),
-                            completeDb.completeDao(),
+                            pendingProjectsDb.peindingProjectsDao,
+                            incompleteDb.inCompleteProjectsDao!!,
+                            completeDb.completeDao,
                             context,
                             Executors.newSingleThreadExecutor()
                         )

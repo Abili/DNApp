@@ -6,22 +6,26 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.menu.MenuView
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.raisc.dnaapp.R
-import com.raisc.dnaapp.adapters.IncompleteProjectsAdapter
 import com.raisc.dnaapp.databinding.ActivityIncompleteBinding
-import com.raisc.dnaapp.model.Project
 import com.raisc.dnaapp.newproject.NewProject
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 class IncompleteActivity : AppCompatActivity(), IncompleteProjectsAdapter.OnItemClick {
     private var binding: ActivityIncompleteBinding? = null
     var viewModel: IncompleteViewModel? = null
     var factory: IncompleteProjectViewModelFactory? = null
-    var incompleteAdapter: IncompleteProjectsAdapter? = null
+    private var incompleteAdapter: IncompleteProjectsAdapter? = null
     private var layoutManager: LinearLayoutManager? = null
+    private val project : Project?=null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityIncompleteBinding.inflate(layoutInflater)
@@ -30,13 +34,20 @@ class IncompleteActivity : AppCompatActivity(), IncompleteProjectsAdapter.OnItem
 
         factory = IncompleteProjectViewModelFactory.createFactory(this)
         viewModel = ViewModelProvider(this, factory!!).get(IncompleteViewModel::class.java)
-        viewModel!!.getIncompleteProjects().observe(this, { items ->
+
+        lifecycleScope.launch {
+            getIncompleteProjects()
+        }
+
+    }
+
+    private suspend fun getIncompleteProjects() {
+        viewModel!!.getIncompleteProjects().collectLatest { items ->
             items.let {
-                incompleteAdapter!!.submitList(items)
+                incompleteAdapter!!.submitData(items)
             }
             populateRecyclerView()
-        })
-
+        }
 
     }
 
@@ -50,7 +61,8 @@ class IncompleteActivity : AppCompatActivity(), IncompleteProjectsAdapter.OnItem
     }
 
     override fun onItemClicked(adapterPosition: Int, itemView: View) {
-        val project = viewModel?.getIncompleteProjects()?.value?.get(adapterPosition)
+        val project = get()
+        )
         val menuDialog = PopupMenu(this, itemView.rootView)
         menuDialog.inflate(R.menu.menu_incomplete)
         menuDialog.setOnMenuItemClickListener(object : MenuItem.OnMenuItemClickListener,
@@ -59,8 +71,8 @@ class IncompleteActivity : AppCompatActivity(), IncompleteProjectsAdapter.OnItem
                 when (item?.itemId) {
                     R.id.edit -> {
                         val intent = Intent(this@IncompleteActivity, NewProject::class.java)
-                        intent.putExtra("project", project)
-                        startActivity(intent)
+//                        intent.putExtra("project", project)
+//                        startActivity(intent)
                     }
                     R.id.delete -> {
                         viewModel?.delete(project!!)

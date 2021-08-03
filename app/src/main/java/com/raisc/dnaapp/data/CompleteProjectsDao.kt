@@ -1,8 +1,7 @@
 package com.raisc.dnaapp.data
 
 
-import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
+import androidx.paging.PagingSource
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.raisc.dnaapp.model.Project
@@ -17,7 +16,7 @@ interface CompleteProjectsDao {
      * @param query a dynamic SQL query
      */
     @RawQuery(observedEntities = [Project::class])
-    fun getAll(query: SupportSQLiteQuery?): DataSource.Factory<Int?, Project?>?
+    fun getAll(query: SupportSQLiteQuery?): PagingSource<Int, Project>
 
     /**
      * Returns a Tea based on the tea name.
@@ -25,7 +24,7 @@ interface CompleteProjectsDao {
      * @param name of a tea
      */
     @Query("SELECT * from projects_table")
-    fun getCompleteProjects(): LiveData<List<Project>>
+    fun getCompleteProjects(): PagingSource<Int, Project>
 
 //    @Query("SELECT * from projects_table")
 //    fun getPendingProjects(): LiveData<List<Project>>
@@ -48,7 +47,7 @@ interface CompleteProjectsDao {
      * @param name of a tea
      */
     @Update
-    fun updateFavorite(vararg name: Project?)
+    fun updateFavorite(name: List<Project>)
 
     /**
      * Returns a random Tea
@@ -65,8 +64,8 @@ interface CompleteProjectsDao {
     @Delete
     fun delete(project: Project?)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun saveProject(project: Project)
+//    @Insert(onConflict = OnConflictStrategy.IGNORE)
+//    fun saveProject(project: Project)
 //    override fun getBarClub(): LiveData<Bars> {
 //        TODO("Not yet implemented")
 //    }

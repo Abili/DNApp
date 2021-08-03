@@ -9,16 +9,16 @@ import com.raisc.dnaapp.utils.SingletonHolder
 
 @Database(entities = [Project::class], version = 1)
 
-abstract class IncompleteProjectsDatabase : RoomDatabase() {
+abstract class PendingProjectsDatabase : RoomDatabase() {
 
-    abstract val inCompleteProjectsDao: InCompleteProjectsDao
+    abstract val peindingProjectsDao: PendingProjectsDao
 
 
-    companion object : SingletonHolder<IncompleteProjectsDatabase, Context>(creator = {
+    companion object : SingletonHolder<PendingProjectsDatabase, Context>(creator = {
         Room.databaseBuilder(
             it.applicationContext,
-            IncompleteProjectsDatabase::class.java,
-            "incompleter_database"
+            PendingProjectsDatabase::class.java,
+            "pending_database"
         )
             .fallbackToDestructiveMigration()
             .build()
